@@ -1,0 +1,46 @@
+<form method="get">
+<!-- 検索キーワード入力 -->
+    {{ form.as_p }}
+
+    <!-- カテゴリの選択 -->
+    <label for="category">カテゴリ:</label>
+    <select name="category">
+        <option value="">すべて</option>
+        <option value="books">本</option>
+        <option value="electronics">電子機器</option>
+        <!-- 他のカテゴリを追加 -->
+    </select>
+    <!-- 価格範囲の入力 -->
+    <label for="min_price">最低価格:</label>
+    <input type="number" name="min_price" min="0">
+    <label for="max_price">最高価格:</label>
+    <input type="number" name="max_price" min="0">
+
+    <button type="submit">検索</button>
+</form>
+
+<ul>
+    {% for product in page_obj %}
+        <li>{{ product.name }} - {{ product.price }}</li>
+    {% empty %}
+        <li>No results found</li>
+    {% endfor %}
+</ul>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">最初</a>  <!-- 最初のページへのリンク -->
+        <!-- 前のページへのリンク -->
+            <a href="?page={{ page_obj.previous_page_number }}">前へ</a>
+        {% endif %}
+        <span class="current">
+            ページ {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+        {% if page_obj.has_next %}
+        <!-- 次のページへのリンク -->
+            <a href="?page={{ page_obj.next_page_number }}">次へ</a>
+        <!-- 最後のページへのリンク -->
+            <a href="?page={{ page_obj.paginator.num_pages }}">最後</a>
+        {% endif %}
+    </span>
+</div>
