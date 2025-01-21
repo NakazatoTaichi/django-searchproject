@@ -1,4 +1,5 @@
 from django import forms
+from .models import Product
 
 class SearchForm(forms.Form):
     query = forms.CharField(
@@ -7,3 +8,8 @@ class SearchForm(forms.Form):
         required=False,
         widget=forms.TextInput(attrs={'placeholder': '検索したいキーワードを入力'})
     )
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['name', 'description', 'price', 'category']

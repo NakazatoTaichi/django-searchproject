@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品一覧</title>
+    <!-- Bootstrap CSS -->
+    <link  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">商品一覧</h1>
+        <!-- 商品リスト -->
+        <ul class="list-group">
+        {% for product in products %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>{{ product.name }}</h5>
+                    <p>{{ product.price }}円</p>
+                </div>
+                <div>
+                    <!-- 編集ボタン -->
+                    <a href="{% url 'product_update' product.id %}" class="btn btn-primary me-2">編集</a>
+                    <!-- 削除ボタン -->
+                    <form action="{% url 'product_delete' product.id %}" method="POST" style="display:inline;" onsubmit="return confirm('本当に削除しますか？');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">削除</button>
+                    </form>
+                </div>
+            </li>
+        {% empty %}
+            <li class="list-group-item">商品がありません。</li>
+        {% endfor %}
+        </ul>
+        <!-- 最初の画面に戻るボタン -->
+        <div class="mt-4 text-center">
+            <a href="{% url 'search_view' %}" class="btn btn-secondary">最初の画面に戻る</a>
+        </div>
+    </div>
+<!-- Bootstrap JS -->
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
