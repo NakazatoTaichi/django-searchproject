@@ -52,3 +52,8 @@
         {% endif %}
     </span>
 </div>
+
+<form method="post" action="{% url 'accounts:logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-link">ログアウト</button>
+</form>

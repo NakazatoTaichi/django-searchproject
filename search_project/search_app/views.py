@@ -3,6 +3,8 @@ from .models import Product, Category
 from .forms import ProductForm, SearchForm
 from django.core.paginator import Paginator
 from pprint import pprint
+from django.contrib.auth.decorators import login_required
+
 
 def product_create(request):
     if request.method == 'POST':
@@ -41,6 +43,7 @@ def product_list(request):
     products = Product.objects.all()
     return render(request, 'product_list.html', {'products': products})
 
+@login_required
 def search_view(request):
     form = SearchForm(request.GET or None)
     results = Product.objects.all()  # クエリセットの初期化
