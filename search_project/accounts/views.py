@@ -15,5 +15,5 @@ class SignUpView(View):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('search_app:search')
+            return redirect('search_app:home')
         return render(request, 'signup.html', {'form': form})
