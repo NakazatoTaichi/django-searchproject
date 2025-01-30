@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>検索アプリ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome for the search icon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 220px;
+            padding: 20px;
+            z-index: 1000;
+        }
+        h3 i {
+            margin-right: 10px;
+            color: white;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-bottom: 2px solid #495057;
+            font-size: 1em;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+        .sidebar i {
+            margin-right: 10px;
+        }
+        .sidebar-footer {
+            position: absolute;
+            bottom: 20px;
+            width: calc(100% - 40px);
+        }
+        .content {
+            margin-left: 240px;
+            padding: 20px;
+            width: 100%;
+        }
+        .search-box {
+            width: 30%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #fff;
+            color: #333;
+        }
+        .search-button {
+            padding: 8px 20px;
+            margin-left: 10px;
+            border: none;
+            background-color: #343a40;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .filter-button {
+            padding: 8px 20px;
+            margin-left: 10px;
+            border: none;
+            background-color: #343a40;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .filter-form input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #fff;
+            color: #333;
+        }
+        table th, table td {
+            vertical-align: middle;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding:16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 4px 0 0 0;
+        }
+        .card-body p {
+            margin-bottom: 0;
+        }
+        .card-title {
+            margin-bottom: 0;
+        }
+        .pagination-container {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar col-2">
+            <h3><i class="fas fa-home"></i>ホーム</h3>
+            <a href="#">コレクション一覧</a>
+            <a href="#"><i class="fas fa-bookmark"></i>コレクション登録</a>
+            <a href="#"><i class="fas fa-folder-plus"></i>カテゴリ登録</a>
+            <a href="#"><i class="fas fa-tags"></i>タグ登録</a>
+            <a href="#"><i class="fas fa-heart"></i>お気に入り</a>
+
+            <div class="sidebar-footer">
+                <a>
+                    <i class="bi bi-person-circle"></i>
+                    {% if user.is_authenticated %}
+                        {{ user.username }}
+                    {% endif %}
+                </a>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i>ログアウト</a>
+                <form id="logout-form" method="post" action="{% url 'accounts:logout' %}" style="display: none;">
+                    {% csrf_token %}
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content col-10">
+            <!-- Search Bar (left-aligned) -->
+            <div class="d-flex mb-4">
+                <input type="text" class="search-box" placeholder="検索キーワードを入力">
+                <button class="search-button">
+                    <i class="fas fa-search"></i> <!-- Search icon -->
+                </button>
+                <button class="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
+                    <i class="fas fa-filter"></i>
+                    絞り込み
+                </button>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-md-9">
+                    <h4>コレクション一覧</h3>
+                </div>
+                <!-- Search Results -->
+                <div class="col-12 col-md-9">
+                    <div class="row">
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-3">
+                            <div class="card">
+                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
+                                <div class="card-body">
+                                    <h5 class="card-title">テストテスト</h5>
+                                    <p>カテゴリ：〇〇〇〇</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div class="pagination-container">
+                        <nav aria-label="...">
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link">Previous</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item active" aria-current="page">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Filter Form -->
+    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">絞り込み検索</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="filter-form">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th><label for="keyword">キーワード</label></th>
+                                    <td><input type="text" id="keyword" class="form-control"></td>
+                                </tr>
+                                <th><label for="category">カテゴリ</label></th>
+                                <td>
+                                    <select id="category" class="form-control">
+                                        <option value="">選択してください</option>
+                                        <option value="category1">カテゴリ1</option>
+                                        <option value="category2">カテゴリ2</option>
+                                        <option value="category3">カテゴリ3</option>
+                                        <!-- 他のカテゴリオプションを追加 -->
+                                    </select>
+                                </td>
+                                <tr>
+                                    <th><label for="date">登録日付</label></th>
+                                    <td><input type="date" id="date" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <th><label for="price">価格</label></th>
+                                    <td>
+                                        <input type="number" id="price_min" class="form-control mb-2" placeholder="最小価格" min="0">
+                                        <input type="number" id="price_max" class="form-control" placeholder="最大価格" min="0">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th><label for="tags">タグ</label></th>
+                                    <td>
+                                        <div>
+                                            <input type="radio" id="tag1" name="tags" value="tag1">
+                                            <label for="tag1">タグ1</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" id="tag2" name="tags" value="tag2">
+                                            <label for="tag2">タグ2</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" id="tag3" name="tags" value="tag3">
+                                            <label for="tag3">タグ3</label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <th><label for="category">並べ替え順</label></th>
+                                <td>
+                                    <select id="category" class="form-control">
+                                        <option value="">選択してください</option>
+                                        <option value="category1">名前順</option>
+                                        <option value="category2">低価格順</option>
+                                        <option value="category3">高価格順</option>
+                                        <option value="category3">登録順</option>
+                                        <option value="category3">古い順</option>
+                                    </select>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                    <button type="button" class="btn search-button">検索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

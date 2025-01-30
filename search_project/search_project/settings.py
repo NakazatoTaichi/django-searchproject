@@ -126,5 +126,5 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # ログイン設定
 LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/search'
+LOGIN_REDIRECT_URL = '/search/home'
 LOGOUT_REDIRECT_URL='/login'
