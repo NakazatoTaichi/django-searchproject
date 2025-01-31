@@ -8,6 +8,7 @@ def redirect_to_runserver(request):
 urlpatterns = [
     path('', redirect_to_runserver),
     path('admin/', admin.site.urls),
-    path('search/', include('search_app.urls')),
     path('', include('accounts.urls')),
+    path('search/', include('search_app.urls')),
+    path('my_collection/', include('my_collection.urls')),
 ]

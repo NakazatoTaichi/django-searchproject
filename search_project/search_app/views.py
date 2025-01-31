@@ -83,6 +83,3 @@ def search_view(request):
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'search.html', {'form': form, 'page_obj': page_obj, 'results': results})
-
-def search_home(request):
-    return render(request, 'home.html')

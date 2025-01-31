@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'search_app',
-    'accounts'
+    'accounts',
+    'my_collection'
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # ログイン設定
-LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/search/home'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'my_collection:home'
 LOGOUT_REDIRECT_URL='/login'
