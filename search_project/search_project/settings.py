@@ -129,3 +129,7 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/mycollection/home'
 LOGOUT_REDIRECT_URL='/login'
+
+#画像関係
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
