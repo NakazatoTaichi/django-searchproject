@@ -53,6 +53,9 @@
             bottom: 20px;
             width: calc(100% - 40px);
         }
+        .alert {
+            margin: 0;
+        }
         .content {
             margin-left: 240px;
             padding: 20px;
@@ -91,6 +94,9 @@
             background: #fff;
             color: #333;
         }
+        h4 {
+            font-weight: bold;
+        }
         table th, table td {
             vertical-align: middle;
         }
@@ -100,6 +106,15 @@
             border-radius: 10px;
             padding:16px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .collection-image {
+            width: 100%;
+            height: 100%;
+        }
+        .collection-image img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
         }
         .card-body {
             padding: 4px 0 0 0;
@@ -122,8 +137,8 @@
         <!-- Sidebar -->
         <div class="sidebar col-2">
             <h3><i class="fas fa-home"></i>ホーム</h3>
-            <a href="#">コレクション一覧</a>
-            <a href="#"><i class="fas fa-bookmark"></i>コレクション登録</a>
+            <a href="{% url 'mycollection:home' %}">コレクション一覧</a>
+            <a href="{% url 'mycollection:collection_register' %}"><i class="fas fa-bookmark"></i>コレクション登録</a>
             <a href="#"><i class="fas fa-folder-plus"></i>カテゴリ登録</a>
             <a href="#"><i class="fas fa-tags"></i>タグ登録</a>
             <a href="#"><i class="fas fa-heart"></i>お気に入り</a>
@@ -158,12 +173,48 @@
 
             <div class="row">
                 <div class="col-12 col-md-9">
-                    <h4>コレクション一覧</h3>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>コレクション一覧</h3>
+                        </div>
+                        <div class="col-6">
+                            {% if messages %}
+                                <div class="messages">
+                                    {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">
+                                        {{ message }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
                 </div>
                 <!-- Search Results -->
                 <div class="col-12 col-md-9">
                     <div class="row">
-                        <div class="col-12 col-md-3 mb-3">
+                        {% for mycollection in mycollections %}
+                            <div class="col-3 mb-3">
+                                <div class="card">
+                                    <div class="collection-image">
+                                        <img src="{{ mycollection.image_path.url }}" alt="画像は未登録です。">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ mycollection.name }}</h5>
+                                        {% if not mycollection.collection_category %}
+                                            <p>カテゴリ：分類なし</p>
+                                        {% else %}
+                                            <p>カテゴリ：{{ mycollection.collection_category.name }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>登録されたコレクションはありません。</p>
+                        {% endfor %}
+                        <!-- <div class="col-12 col-md-3 mb-3">
                             <div class="card">
                                 <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
                                 <div class="card-body">
@@ -225,16 +276,7 @@
                                     <p>カテゴリ：〇〇〇〇</p>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-12 col-md-9">
@@ -287,7 +329,7 @@
                                     </select>
                                 </td>
                                 <tr>
-                                    <th><label for="date">登録日付</label></th>
+                                    <th><label for="date">入手日</label></th>
                                     <td><input type="date" id="date" class="form-control"></td>
                                 </tr>
                                 <tr>
@@ -338,6 +380,14 @@
     </div>
 
     <!-- Bootstrap JS and dependencies -->
+    <script type="text/javascript">
+        setTimeout(function() {
+            let messages = document.querySelector('.messages');
+            if (messages) {
+            messages.style.display = 'none';
+            }
+        }, 5000);  // 5秒後にメッセージを非表示にする
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
