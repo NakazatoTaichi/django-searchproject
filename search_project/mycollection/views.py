@@ -2,6 +2,7 @@ from django.shortcuts import render , redirect
 from .forms import MyCollectionForm
 from django.contrib import messages
 from .models import MyCollection
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 
 
@@ -9,7 +10,12 @@ from django.contrib.auth.decorators import login_required
 def collection_home(request):
     mycollections = MyCollection.objects.filter(user=request.user)
 
-    return render(request, 'home.html', {'mycollections': mycollections})
+    # ページネーション
+    paginator = Paginator(mycollections, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'home.html', {'page_obj': page_obj})
 
 @login_required
 def collection_register(request):

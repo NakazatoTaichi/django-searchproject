@@ -17,7 +17,6 @@
             color: #333;
             margin: 0;
             padding: 0;
-            display: flex;
         }
         .sidebar {
             background-color: #343a40;
@@ -195,7 +194,7 @@
                 <!-- Search Results -->
                 <div class="col-12 col-md-9">
                     <div class="row">
-                        {% for mycollection in mycollections %}
+                        {% for mycollection in page_obj %}
                             <div class="col-3 mb-3">
                                 <div class="card">
                                     <div class="collection-image">
@@ -214,85 +213,22 @@
                         {% empty %}
                             <p>登録されたコレクションはありません。</p>
                         {% endfor %}
-                        <!-- <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3 mb-3">
-                            <div class="card">
-                                <img src="../static/images/image.jpg" class="card-img-top" alt="画像は未登録です。">
-                                <div class="card-body">
-                                    <h5 class="card-title">テストテスト</h5>
-                                    <p>カテゴリ：〇〇〇〇</p>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
                 <div class="col-12 col-md-9">
                     <div class="pagination-container">
                         <nav aria-label="...">
                             <ul class="pagination">
-                                <li class="page-item disabled">
-                                    <a class="page-link">Previous</a>
+                                <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}" {% if not page_obj.has_previous %}aria-disabled="true"{% endif %}>Previous</a>
                                 </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active" aria-current="page">
-                                    <a class="page-link" href="#">2</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
+                                {% for num in page_obj.paginator.page_range %}
+                                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                    </li>
+                                {% endfor %}
+                                <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}" {% if not page_obj.has_next %}aria-disabled="true"{% endif %}>Next</a>
                                 </li>
                             </ul>
                         </nav>
