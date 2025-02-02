@@ -4,12 +4,17 @@ from .models import CollectionCategory
 
 class MyCollectionForm(forms.ModelForm):
     collection_category = forms.ModelChoiceField(
-        queryset=CollectionCategory.objects.all(),
+        queryset=CollectionCategory.objects.none(),
         empty_label="分類なし",
         required=False,
-        blank=True,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+    # ユーザーが登録したカテゴリが表示されるようにする
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['collection_category'].queryset = CollectionCategory.objects.filter(user=user)
+
     name = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'コレクション名'})
@@ -35,3 +40,15 @@ class MyCollectionForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '価格', 'min': 0}),
             'memo': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'メモ'})
         }
+
+
+class CollectionCategoryForm(forms.ModelForm):
+    name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'カテゴリ名'})
+    )
+    class Meta:
+        model = CollectionCategory
+        fields = (
+            'name',
+        )

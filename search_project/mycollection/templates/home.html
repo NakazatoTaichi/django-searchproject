@@ -138,7 +138,7 @@
             <h3><i class="fas fa-home"></i>ホーム</h3>
             <a href="{% url 'mycollection:home' %}">コレクション一覧</a>
             <a href="{% url 'mycollection:collection_register' %}"><i class="fas fa-bookmark"></i>コレクション登録</a>
-            <a href="#"><i class="fas fa-folder-plus"></i>カテゴリ登録</a>
+            <a href="{% url 'mycollection:collection_category_register' %}"><i class="fas fa-folder-plus"></i>カテゴリ登録</a>
             <a href="#"><i class="fas fa-tags"></i>タグ登録</a>
             <a href="#"><i class="fas fa-heart"></i>お気に入り</a>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>コレクション登録</title>
+    <title>コレクションカテゴリ登録</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome for the search icon -->
@@ -107,7 +107,7 @@
                 <div class="col-12 col-md-9">
                     <div class="row">
                         <div class="col-6">
-                            <h4>コレクション登録</h3>
+                            <h4>カテゴリ登録</h3>
                         </div>
                     </div>
                     <div class="col-6">
@@ -128,30 +128,8 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th><label for="{{ form.name.id_for_label }}">コレクション名</label></th>
+                                    <th><label for="{{ form.name.id_for_label }}">カテゴリ名</label></th>
                                     <td>{{ form.name }}</td>
-                                </tr>
-                                <tr>
-                                    <th><label for="{{ form.description.id_for_label }}">説明</label></th>
-                                    <td>{{ form.description }}</td>
-                                </tr>
-                                <tr>
-                                    <th><label for="{{ form.get_date.id_for_label }}">入手日</label></th>
-                                    <td>{{ form.get_date }}</td>
-                                </tr>
-                                <tr>
-                                    <th><label for="{{ form.price.id_for_label }}">価格</label></th>
-                                    <td>{{ form.price }}</td>
-                                </tr>
-                                <th><label for="{{ form.collection_category.id_for_label }}">カテゴリ</label></th>
-                                <td>{{ form.collection_category }}</td>
-                                <tr>
-                                    <th><label for="{{ form.image_path.id_for_label }}">イメージ画像</label></th>
-                                    <td>{{ form.image_path }}</td>
-                                </tr>
-                                <tr>
-                                    <th><label for="{{ form.memo.id_for_label }}">メモ</label></th>
-                                    <td>{{ form.memo }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -163,7 +141,6 @@
             </div>
         </div>
     </div>
-    <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 </body>
