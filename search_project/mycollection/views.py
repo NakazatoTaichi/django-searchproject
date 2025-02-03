@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect
-from .forms import MyCollectionForm ,CollectionCategoryForm
+from .forms import MyCollectionForm, CollectionCategoryForm
 from django.contrib import messages
 from .models import MyCollection
 from django.core.paginator import Paginator
@@ -9,6 +9,10 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def collection_home(request):
     mycollections = MyCollection.objects.filter(user=request.user)
+
+    query = request.GET.get('query')
+    if query:
+        mycollections = mycollections.filter(name__icontains=query)
 
     # ページネーション
     paginator = Paginator(mycollections, 8)
