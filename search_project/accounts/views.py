@@ -14,6 +14,7 @@ class SignUpView(View):
     def post(self, request):
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('search_app:home')
+            user = form.save()
+            login(request, user)
+            return redirect('mycollection:home')
         return render(request, 'signup.html', {'form': form})
