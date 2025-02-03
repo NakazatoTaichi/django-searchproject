@@ -60,8 +60,8 @@
             padding: 20px;
             width: 100%;
         }
-        .search-box {
-            width: 30%;
+        .name-search-box input {
+            width: 80%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -159,15 +159,25 @@
         <!-- Main Content -->
         <div class="content col-10">
             <!-- Search Bar (left-aligned) -->
-            <div class="d-flex mb-4">
-                <input type="text" class="search-box" placeholder="検索キーワードを入力">
-                <button class="search-button">
-                    <i class="fas fa-search"></i> <!-- Search icon -->
-                </button>
-                <button class="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
-                    <i class="fas fa-filter"></i>
-                    絞り込み
-                </button>
+            <div class="search-form mb-4">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="name-search-box">
+                            <form method="get">
+                                <input type="text" name="query" placeholder="コレクション名から検索" value="{{ request.GET.query }}"  />
+                                <button class="search-button" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-4 filter-search-box">
+                        <button class="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
+                            <i class="fas fa-filter"></i>
+                            絞り込み
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -220,15 +230,15 @@
                         <nav aria-label="...">
                             <ul class="pagination">
                                 <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
-                                    <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}" {% if not page_obj.has_previous %}aria-disabled="true"{% endif %}>Previous</a>
+                                    <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">Previous</a>
                                 </li>
                                 {% for num in page_obj.paginator.page_range %}
                                     <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        <a class="page-link" href="?page={{ num }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">{{ num }}</a>
                                     </li>
                                 {% endfor %}
                                 <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
-                                    <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}" {% if not page_obj.has_next %}aria-disabled="true"{% endif %}>Next</a>
+                                    <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if not page_obj.has_next %}aria-disabled='true'{% endif %}">Next</a>
                                 </li>
                             </ul>
                         </nav>
