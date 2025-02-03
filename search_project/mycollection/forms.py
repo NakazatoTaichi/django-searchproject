@@ -2,6 +2,17 @@ from django import forms
 from .models import MyCollection
 from .models import CollectionCategory
 
+class CollectionSearchForm(forms.Form):
+    collection_category = forms.ModelChoiceField(
+        queryset=CollectionCategory.objects.none(),
+        empty_label="分類なし",
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['collection_category'].queryset = CollectionCategory.objects.filter(user=user)
 class MyCollectionForm(forms.ModelForm):
     collection_category = forms.ModelChoiceField(
         queryset=CollectionCategory.objects.none(),

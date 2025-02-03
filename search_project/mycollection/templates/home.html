@@ -133,7 +133,6 @@
 </head>
 <body>
     <div class="d-flex">
-        <!-- Sidebar -->
         <div class="sidebar col-2">
             <h3><i class="fas fa-home"></i>ホーム</h3>
             <a href="{% url 'mycollection:home' %}">コレクション一覧</a>
@@ -156,9 +155,7 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="content col-10">
-            <!-- Search Bar (left-aligned) -->
             <div class="search-form mb-4">
                 <div class="row">
                     <div class="col-4">
@@ -171,15 +168,28 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-4 filter-search-box">
+                    <div class="col-2 filter-search-box">
                         <button class="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
                             <i class="fas fa-filter"></i>
                             絞り込み
                         </button>
                     </div>
+                    <div class="col-2">
+                        <form method="get">
+                            <div class="dropdown">
+                                <button class="btn filter-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    並び替え順
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><button class="dropdown-item" name="order" value="name_order" type="submit">名前順</button></li>
+                                    <li><button class="dropdown-item" name="order" value="register_order_des" type="submit">登録順</button></li>
+                                    <li><button class="dropdown-item" name="order" value="register_order_asc" type="submit">古い順</button></li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-12 col-md-9">
                     <div class="row">
@@ -201,7 +211,6 @@
                 </div>
 
                 </div>
-                <!-- Search Results -->
                 <div class="col-12 col-md-9">
                     <div class="row">
                         {% for mycollection in page_obj %}
@@ -230,15 +239,35 @@
                         <nav aria-label="...">
                             <ul class="pagination">
                                 <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
-                                    <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">Previous</a>
+                                    <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}
+                                    {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
+                                    {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
+                                    {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
+                                    {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
+                                    {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
+                                    {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
+                                    {% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">Previous</a>
                                 </li>
                                 {% for num in page_obj.paginator.page_range %}
                                     <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                                        <a class="page-link" href="?page={{ num }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}">{{ num }}</a>
+                                        <a class="page-link" href="?page={{ num }}
+                                        {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
+                                        {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
+                                        {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
+                                        {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
+                                        {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
+                                        {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}">{{ num }}</a>
                                     </li>
                                 {% endfor %}
                                 <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
-                                    <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if not page_obj.has_next %}aria-disabled='true'{% endif %}">Next</a>
+                                    <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}
+                                    {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
+                                    {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
+                                    {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
+                                    {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
+                                    {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
+                                    {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
+                                    {% if not page_obj.has_next %}aria-disabled='true'{% endif %}">Next</a>
                                 </li>
                             </ul>
                         </nav>
@@ -248,7 +277,6 @@
         </div>
     </div>
 
-    <!-- Modal for Filter Form -->
     <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -256,83 +284,44 @@
                     <h5 class="modal-title" id="filterModalLabel">絞り込み検索</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="filter-form">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th><label for="keyword">キーワード</label></th>
-                                    <td><input type="text" id="keyword" class="form-control"></td>
-                                </tr>
-                                <th><label for="category">カテゴリ</label></th>
-                                <td>
-                                    <select id="category" class="form-control">
-                                        <option value="">選択してください</option>
-                                        <option value="category1">カテゴリ1</option>
-                                        <option value="category2">カテゴリ2</option>
-                                        <option value="category3">カテゴリ3</option>
-                                        <!-- 他のカテゴリオプションを追加 -->
-                                    </select>
-                                </td>
-                                <tr>
-                                    <th><label for="date">入手日</label></th>
-                                    <td><input type="date" id="date" class="form-control"></td>
-                                </tr>
-                                <tr>
-                                    <th><label for="price">価格</label></th>
-                                    <td>
-                                        <input type="number" id="price_min" class="form-control mb-2" placeholder="最小価格" min="0">
-                                        <input type="number" id="price_max" class="form-control" placeholder="最大価格" min="0">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th><label for="tags">タグ</label></th>
-                                    <td>
-                                        <div>
-                                            <input type="radio" id="tag1" name="tags" value="tag1">
-                                            <label for="tag1">タグ1</label>
-                                        </div>
-                                        <div>
-                                            <input type="radio" id="tag2" name="tags" value="tag2">
-                                            <label for="tag2">タグ2</label>
-                                        </div>
-                                        <div>
-                                            <input type="radio" id="tag3" name="tags" value="tag3">
-                                            <label for="tag3">タグ3</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <th><label for="category">並べ替え順</label></th>
-                                <td>
-                                    <select id="category" class="form-control">
-                                        <option value="">選択してください</option>
-                                        <option value="category1">名前順</option>
-                                        <option value="category2">低価格順</option>
-                                        <option value="category3">高価格順</option>
-                                        <option value="category3">登録順</option>
-                                        <option value="category3">古い順</option>
-                                    </select>
-                                </td>
-                            </tbody>
-                        </table>
+                <form method="GET">
+                    <div class="modal-body">
+                        <div class="filter-form">
+                                <table class="table">
+                                    <tbody>
+                                        <th><label for="{{ form.collection_category.id_for_label }}">カテゴリ</label></th>
+                                        <td>{{ form.collection_category }}</td>
+                                        <tr>
+                                            <th><label for="get_date">入手日</label></th>
+                                            <td><input type="date" id="get_date" name="get_date" class="form-control"></td>
+                                        </tr>
+                                        <tr>
+                                            <th><label for="price">価格</label></th>
+                                            <td>
+                                                <input type="number" id="price_min" name="price_min" class="form-control mb-2" placeholder="最小価格" min="0">
+                                                <input type="number" id="price_max" name="price_max" class="form-control" placeholder="最大価格" min="1">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                    <button type="button" class="btn search-button">検索</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        <button type="submit" class="btn search-button">検索</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS and dependencies -->
     <script type="text/javascript">
         setTimeout(function() {
             let messages = document.querySelector('.messages');
             if (messages) {
             messages.style.display = 'none';
             }
-        }, 5000);  // 5秒後にメッセージを非表示にする
+        }, 5000);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
