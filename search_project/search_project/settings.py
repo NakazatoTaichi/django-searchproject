@@ -33,9 +33,6 @@ INSTALLED_APPS = [
     'search_app',
     'accounts',
     'mycollection',
-    # 'mycollection.apps.MycollectionConfig',
-    # 'search_app.apps.SearchAppConfig',
-    # 'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
