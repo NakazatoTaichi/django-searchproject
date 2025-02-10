@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm
 from django.contrib import messages
 from .models import MyCollection
@@ -67,6 +67,19 @@ def collection_register(request):
         form = MyCollectionForm(user=request.user)
 
     return render(request, 'collection_register.html', {'form': form})
+
+@login_required
+def collection_edit(request, pk):
+    mycollection = get_object_or_404(MyCollection, pk=pk)
+    if request.method == 'POST':
+        form = MyCollectionForm(request.POST, instance=mycollection)
+        if form.is_valid():
+            form.save()
+            return redirect('mycollection:home')
+    else:
+        form = MyCollectionForm(instance=mycollection)
+
+    return  render(request,  'collection_edit.html',  {'form':  form})
 
 @login_required
 def collection_category_register(request):

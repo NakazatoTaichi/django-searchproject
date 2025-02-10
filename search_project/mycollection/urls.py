@@ -8,6 +8,7 @@ app_name = 'mycollection'
 urlpatterns = [
     path('home', views.collection_home, name='home'),
     path('register', views.collection_register, name='collection_register'),
+    path('edit/<int:pk>', views.collection_edit, name='collection_edit'),
     path('category/register', views.collection_category_register, name='collection_category_register'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
