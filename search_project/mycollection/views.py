@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm
 from django.contrib import messages
 from .models import MyCollection
@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def collection_home(request):
-    mycollections = MyCollection.objects.filter(user=request.user)
+    mycollections = MyCollection.objects.order_by('-created_at').filter(user=request.user)
 
     # コレクション名検索
     query = request.GET.get('query')
@@ -67,6 +67,31 @@ def collection_register(request):
         form = MyCollectionForm(user=request.user)
 
     return render(request, 'collection_register.html', {'form': form})
+
+@login_required
+def collection_edit(request, pk):
+    mycollection = get_object_or_404(MyCollection, pk=pk)
+    if request.method == 'POST':
+        form = MyCollectionForm(request.POST, request.FILES , user=request.user, instance=mycollection)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'コレクションが編集されました。')
+            return redirect('mycollection:home')
+    else:
+        form = MyCollectionForm(user=request.user , instance=mycollection)
+
+    return  render(request,  'collection_edit.html',  {'form':  form})
+
+@login_required
+def collection_delete(request, pk):
+    mycollection = get_object_or_404(MyCollection, pk=pk)
+
+    if request.method == 'POST':
+        mycollection.delete()
+        messages.success(request, 'コレクションが削除されました。')
+        return redirect('mycollection:home')
+
+    return redirect('mycollection:home')
 
 @login_required
 def collection_category_register(request):
