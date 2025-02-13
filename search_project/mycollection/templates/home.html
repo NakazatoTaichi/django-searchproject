@@ -274,6 +274,19 @@
             }
             .modal {
                 margin-top: 80px;
+                padding: 0 20px;
+                max-height: 530px;
+            }
+            .modal-detail-table th, td {
+                font-size: 0.75rem;
+            }
+            .modal-detail-content h5 {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                max-width: 40ch;
+                overflow: hidden;
+                margin-bottom: 10px;
+                font-weight: bold;
             }
         }
     </style>
@@ -577,19 +590,94 @@
     </nav>
     <div class="mobile-content">
         <div class="row">
+            <div class="col-12">
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
             {% for mycollection in page_obj %}
                 <div class="col-6 mb-2">
                     <div class="card">
-                        <div class="collection-image">
-                            <img src="{{ mycollection.image_path.url }}" alt="画像は未登録です。">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ mycollection.name }}</h5>
-                            {% if not mycollection.collection_category %}
-                                <p>カテゴリ：分類なし</p>
-                            {% else %}
-                                <p>カテゴリ：{{ mycollection.collection_category.name }}</p>
-                            {% endif %}
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#myCollectionMobileModal{{ mycollection.id }}">
+                            <div class="collection-image">
+                                <img src="{{ mycollection.image_path.url }}" alt="画像は未登録です。">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ mycollection.name }}</h5>
+                                {% if not mycollection.collection_category %}
+                                    <p>カテゴリ：分類なし</p>
+                                {% else %}
+                                    <p>カテゴリ：{{ mycollection.collection_category.name }}</p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                    <!-- コレクション詳細のモーダルウィンドウ -->
+                    <div class="modal fade" id="myCollectionMobileModal{{ mycollection.id }}" tabindex="-1" aria-labelledby="filterMobileModalLabel{{ mycollection.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="filterMobileModalLabel{{ mycollection.id }}">コレクション詳細</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="filter-form">
+                                        <div class="modal-collection-image">
+                                            <img src="{{ mycollection.image_path.url }}" alt="画像は未登録です。">
+                                        </div>
+                                        <div class="card-body modal-detail-content">
+                                            <h5 class="card-title">{{ mycollection.name }}</h5>
+                                            <table class="table table-bordered modal-detail-table">
+                                                {% if mycollection.description|default_if_none:"" %}
+                                                <tr>
+                                                    <th class="text-start w-25">説明</th>
+                                                    <td class="long-text">{{ mycollection.description }}</td>
+                                                </tr>
+                                                {% endif %}
+                                                {% if mycollection.get_date|default_if_none:"" %}
+                                                <tr>
+                                                    <th class="text-start w-25">入手日</th>
+                                                    <td>{{ mycollection.get_date }}</td>
+                                                </tr>
+                                                {% endif %}
+                                                {% if mycollection.price|default_if_none:"" %}
+                                                <tr>
+                                                    <th class="text-start w-25">価格</th>
+                                                    <td>{{ mycollection.price }}円</td>
+                                                </tr>
+                                                {% endif %}
+                                                {% if mycollection.collection_category|default_if_none:"" %}
+                                                <tr>
+                                                    <th class="text-start w-25">カテゴリ</th>
+                                                    <td>{{ mycollection.collection_category.name }}</td>
+                                                </tr>
+                                                {% else %}
+                                                <tr>
+                                                    <th class="text-start w-25">カテゴリ</th>
+                                                    <td>分類なし</td>
+                                                </tr>
+                                                {% endif %}
+                                                {% if mycollection.memo|default_if_none:"" %}
+                                                <tr>
+                                                    <th class="text-start w-25">メモ</th>
+                                                    <td class="long-text">{{ mycollection.memo }}</td>
+                                                </tr>
+                                                {% endif %}
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                    <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
