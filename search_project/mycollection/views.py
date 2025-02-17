@@ -4,7 +4,10 @@ from django.contrib import messages
 from .models import MyCollection
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-
+import io
+from PIL import Image
+from pillow_heif import open_heif
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 @login_required
 def collection_home(request):
@@ -54,7 +57,12 @@ def collection_home(request):
 @login_required
 def collection_register(request):
     if request.method == 'POST':
-        form = MyCollectionForm(request.POST, request.FILES, user=request.user)
+        uploaded_image = request.FILES.get('image_path')
+
+        if uploaded_image and uploaded_image.name.lower().endswith('.heic'):
+            uploaded_image = heic_to_jpeg(uploaded_image)
+
+        form = MyCollectionForm(request.POST, {'image_path': uploaded_image}, user=request.user)
         if form.is_valid():
             mycollection = form.save(commit=False)
             mycollection.user = request.user
@@ -72,7 +80,12 @@ def collection_register(request):
 def collection_edit(request, pk):
     mycollection = get_object_or_404(MyCollection, pk=pk)
     if request.method == 'POST':
-        form = MyCollectionForm(request.POST, request.FILES , user=request.user, instance=mycollection)
+        uploaded_image = request.FILES.get('image_path')
+
+        if uploaded_image and uploaded_image.name.lower().endswith('.heic'):
+            uploaded_image = heic_to_jpeg(uploaded_image)
+
+        form = MyCollectionForm(request.POST,  {'image_path': uploaded_image} , user=request.user, instance=mycollection)
         if form.is_valid():
             form.save()
             messages.success(request, 'コレクションが編集されました。')
@@ -81,6 +94,32 @@ def collection_edit(request, pk):
         form = MyCollectionForm(user=request.user , instance=mycollection)
 
     return  render(request,  'collection_edit.html',  {'form':  form})
+
+# HEICをJPGに変更
+def heic_to_jpeg(uploaded_image):
+    heif_file = open_heif(uploaded_image)
+    image = Image.frombytes(
+        heif_file.mode,
+        heif_file.size,
+        heif_file.data,
+        "raw",
+        heif_file.mode,
+        heif_file.stride
+    )
+
+    output_io = io.BytesIO()
+    image.save(output_io, format="JPEG")
+    output_io.seek(0)
+
+    # Django の InMemoryUploadedFile に変換
+    return InMemoryUploadedFile(
+        output_io,
+        'image',
+        uploaded_image.name.replace('.HEIC', '.jpg').replace('.heic', '.jpg'),
+        'image/jpeg',
+        output_io.getbuffer().nbytes,
+        None
+    )
 
 @login_required
 def collection_delete(request, pk):
