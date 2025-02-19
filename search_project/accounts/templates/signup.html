@@ -1,14 +1,19 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="ja">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>サインアップ画面</title>
-        <!-- <link rel="stylesheet" href="./css/style.css"> -->
+        <link rel="icon" type="image/x-icon" href="{% static 'images/collog_favicon.ico' %}">
     </head>
     <body>
         <div class="glass-container">
             <div class="login-box">
+                <div class="app-logo">
+                    <img src="{% static 'images/collog.png' %}" alt="アプリロゴ">
+                </div>
                 <h2>サインアップ</h2>
                 <form method="POST">
                     {% csrf_token %}
@@ -34,9 +39,9 @@
                     <input type="password" id="password2" name="password2" required placeholder="パスワード(確認用)">
                     <div class="options"></div>
                     <button type="submit">サインアップ</button>
-                    <p style="margin-bottom: 20px;">
+                    <div class="login-a">
                         <a href="{% url 'accounts:login' %}">アカウントをお持ちの方はこちら</a>
-                    </p>
+                    </div>
                 </form>
             </div>
         </div>
@@ -82,15 +87,19 @@ body {
     margin: 0 auto;
     text-align: center;
 }
+.app-logo {
+    margin : 30px 0 20px 0;
+}
+.app-logo img {
+    width: 100px;
+    height: 100px;
+}
 h2{
     color: #fff;
-    margin-top: 30px;
-    margin-bottom: -20px;
 }
 form{
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
 }
 input{
     padding: 10px;
@@ -142,5 +151,9 @@ p{
     font-size: 12px;
     color: #fff;
     margin-top: 15px;
+}
+.login-a {
+    font-size: 12px;
+    margin: 15px 0 30px 0;
 }
 </style>
