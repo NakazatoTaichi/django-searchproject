@@ -14,6 +14,6 @@ assignees: NakazatoTaichi
 -
 
 ## 動作確認事項
-- [ ]
-- [ ]
-- [ ]
+[ ]
+[ ]
+[ ]
