@@ -139,7 +139,9 @@
                         </div>
                     </div>
                 {% empty %}
+                <div class="not-collection-message">
                     <p>登録されたコレクションはありません。</p>
+                </div>
                 {% endfor %}
             </div>
         </div>
@@ -155,7 +157,7 @@
                             {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
                             {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
                             {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
-                            {% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">Previous</a>
+                            {% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">前へ</a>
                         </li>
                         {% for num in page_obj.paginator.page_range %}
                             <li class="page-item {% if page_obj.number == num %}active{% endif %}">
@@ -176,7 +178,7 @@
                             {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
                             {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
                             {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
-                            {% if not page_obj.has_next %}aria-disabled='true'{% endif %}">Next</a>
+                            {% if not page_obj.has_next %}aria-disabled='true'{% endif %}">次へ</a>
                         </li>
                     </ul>
                 </nav>
@@ -317,7 +319,9 @@
                 </div>
             </div>
         {% empty %}
-            <p>登録されたコレクションはありません。</p>
+            <div class="not-collection-message">
+                <p>登録されたコレクションはありません。</p>
+            </div>
         {% endfor %}
         <div class="col-12 col-md-9">
             <div class="pagination-container">
@@ -331,7 +335,7 @@
                             {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
                             {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
                             {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
-                            {% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">Previous</a>
+                            {% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">前へ</a>
                         </li>
                         {% for num in page_obj.paginator.page_range %}
                             <li class="page-item {% if page_obj.number == num %}active{% endif %}">
@@ -352,7 +356,7 @@
                             {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
                             {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
                             {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
-                            {% if not page_obj.has_next %}aria-disabled='true'{% endif %}">Next</a>
+                            {% if not page_obj.has_next %}aria-disabled='true'{% endif %}">次へ</a>
                         </li>
                     </ul>
                 </nav>
@@ -633,6 +637,9 @@
         }
         .table th, td {
             font-size: 10px;
+        }
+        .not-collection-message {
+            margin-top: 44px;
         }
     }
 </style>
