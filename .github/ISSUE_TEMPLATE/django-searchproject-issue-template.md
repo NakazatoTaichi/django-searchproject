@@ -7,11 +7,13 @@ assignees: NakazatoTaichi
 
 ---
 
-## Purpose
-Describe the purpose of this issue
+## 目的（やりたいこと）
+-
 
-## Task
-Break down and manage your tasks.
+## 参考記事
+-
+
+## 動作確認事項
 - [ ]
 - [ ]
 - [ ]
