@@ -12,7 +12,7 @@
                         <h4>カテゴリ登録</h4>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-12">
                     {% if messages %}
                         <div class="messages">
                             {% for message in messages %}
@@ -67,6 +67,9 @@
         border-bottom: none !important;
         padding-left: 12px !important;
     }
+    .alert {
+        margin-bottom: 0;
+    }
     @media (max-width: 768px) {
         .content {
             margin-left: 0;
@@ -74,4 +77,19 @@
         }
     }
 </style>
+<script type="text/javascript">
+    setTimeout(function() {
+        let messages = document.querySelector('.messages');
+        if (messages) {
+        messages.style.display = 'none';
+        }
+    }, 5000);
+
+    setTimeout(function() {
+        let mobile_messages = document.querySelector('.mobile-messages');
+        if (mobile_messages) {
+            mobile_messages.style.display = 'none';
+        }
+    }, 5000);
+</script>
 {% endblock %}
