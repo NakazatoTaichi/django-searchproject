@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm
+from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm, CollectionTagForm
 from django.contrib import messages
 from .models import MyCollection
 from django.core.paginator import Paginator
@@ -149,16 +149,15 @@ def collection_category_register(request):
 
 @login_required
 def collection_tag_register(request):
-    # if request.method == 'POST':
-    #     form = CollectionCategoryForm(request.POST)
-    #     if form.is_valid():
-    #         collection_category = form.save(commit=False)
-    #         collection_category.user = request.user
-    #         collection_category.save()
-    #         messages.success(request, 'カテゴリが登録されました。')
-    #         return redirect('mycollection:collection_category_register')
-    # else:
-    #     form = CollectionCategoryForm()
+    if request.method == 'POST':
+        form = CollectionTagForm(request.POST)
+        if form.is_valid():
+            collection_tag = form.save(commit=False)
+            collection_tag.user = request.user
+            collection_tag.save()
+            messages.success(request, 'タグが登録されました。')
+            return redirect('mycollection:collection_tag_register')
+    else:
+        form = CollectionTagForm()
 
-    # return render(request, 'collection_category_register.html', {'form': form})
-    return render(request, 'collection_tag_register.html')
+    return render(request, 'collection_tag_register.html', {'form': form})

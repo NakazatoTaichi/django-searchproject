@@ -30,12 +30,12 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <th><label for="">タグ名</label></th>
-                                <!-- <td>{{ form.name }}</td> -->
+                                <th><label for="{{ form.name.id_for_label }}">タグ名</label></th>
+                                <td>{{ form.name }}</td>
                             </tr>
                             <tr>
-                                <th><label for="">色</label></th>
-                                <!-- <td>{{ form.name }}</td> -->
+                                <th><label for="{{ form.color_code.id_for_label }}">色</label></th>
+                                <td>{{ form.color_code }}</td>
                             </tr>
                         </tbody>
                     </table>

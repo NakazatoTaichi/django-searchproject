@@ -1,6 +1,5 @@
 from django import forms
-from .models import MyCollection
-from .models import CollectionCategory
+from .models import MyCollection , CollectionCategory , CollectionTag
 
 class CollectionSearchForm(forms.Form):
     collection_category = forms.ModelChoiceField(
@@ -62,4 +61,20 @@ class CollectionCategoryForm(forms.ModelForm):
         model = CollectionCategory
         fields = (
             'name',
+        )
+
+class CollectionTagForm(forms.ModelForm):
+    name = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'タグ名'})
+    )
+    color_code = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'type': 'color', 'class': 'form-control form-control-color'}),
+    )
+    class Meta:
+        model = CollectionTag
+        fields = (
+            'name',
+            'color_code',
         )
