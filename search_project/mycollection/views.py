@@ -146,3 +146,19 @@ def collection_category_register(request):
         form = CollectionCategoryForm()
 
     return render(request, 'collection_category_register.html', {'form': form})
+
+@login_required
+def collection_tag_register(request):
+    # if request.method == 'POST':
+    #     form = CollectionCategoryForm(request.POST)
+    #     if form.is_valid():
+    #         collection_category = form.save(commit=False)
+    #         collection_category.user = request.user
+    #         collection_category.save()
+    #         messages.success(request, 'カテゴリが登録されました。')
+    #         return redirect('mycollection:collection_category_register')
+    # else:
+    #     form = CollectionCategoryForm()
+
+    # return render(request, 'collection_category_register.html', {'form': form})
+    return render(request, 'collection_tag_register.html')

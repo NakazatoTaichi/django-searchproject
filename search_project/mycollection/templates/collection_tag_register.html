@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}コレクションタグ登録{% endblock %}
+
+{% block content %}
+<div class="content col-10">
+    <div class="d-flex">
+        <div class="row">
+            <div class="col-12 col-md-9">
+                <div class="row">
+                    <div class="col-6">
+                        <h4>タグ登録</h4>
+                    </div>
+                </div>
+                <div class="col-6">
+                    {% if messages %}
+                        <div class="messages">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 col-md-9">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th><label for="">タグ名</label></th>
+                                <!-- <td>{{ form.name }}</td> -->
+                            </tr>
+                            <tr>
+                                <th><label for="">色</label></th>
+                                <!-- <td>{{ form.name }}</td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-grid gap-2 col-6 mx-auto mt-2">
+                        <button class="btn form-control" type="submit" style="background-color: #495057; color: #ffffff;">登録</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .content {
+        margin-left: 240px;
+        padding: 20px;
+        width: 100%;
+    }
+    h4 {
+        font-weight: bold;
+    }
+    table {
+        border-collapse:separate;
+        border-spacing:0 15px;
+        border: none;
+    }
+    table td {
+        vertical-align: middle;
+        border-bottom: none !important;
+    }
+    table th {
+        vertical-align: middle;
+        border-left: 5px solid #495057;
+        border-bottom: none !important;
+        padding-left: 12px !important;
+    }
+    @media (max-width: 768px) {
+        .content {
+            margin-left: 0;
+            margin-top: 56px;
+        }
+    }
+</style>
+{% endblock %}
