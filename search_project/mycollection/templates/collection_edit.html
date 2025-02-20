@@ -60,6 +60,10 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th><label for="{{ form.tag.id_for_label }}">タグ付け</label></th>
+                                <td>{{ form.tag }}</td>
+                            </tr>
+                            <tr>
                                 <th><label for="{{ form.memo.id_for_label }}">メモ</label></th>
                                 <td>{{ form.memo }}</td>
                             </tr>
@@ -105,6 +109,21 @@
     }
     .preview-image {
         max-width: 200px;
+    }
+    .tag-checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        width: 100%;
+    }
+    .tag-checkbox-group input {
+        margin-right: 5px;
+    }
+
+    .tag-checkbox-group label {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
     }
     @media (max-width: 768px) {
         .content {
