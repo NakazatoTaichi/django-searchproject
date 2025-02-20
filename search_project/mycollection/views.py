@@ -67,6 +67,7 @@ def collection_register(request):
             mycollection = form.save(commit=False)
             mycollection.user = request.user
             mycollection.save()
+            form.save_m2m()
             messages.success(request, 'コレクションが登録されました。')
             return redirect('mycollection:home')
         else:
@@ -87,7 +88,10 @@ def collection_edit(request, pk):
 
         form = MyCollectionForm(request.POST,  {'image_path': uploaded_image} , user=request.user, instance=mycollection)
         if form.is_valid():
-            form.save()
+            mycollection = form.save(commit=False)
+            mycollection.user = request.user
+            mycollection.save()
+            form.save_m2m()
             messages.success(request, 'コレクションが編集されました。')
             return redirect('mycollection:home')
     else:

@@ -19,12 +19,6 @@ class MyCollectionForm(forms.ModelForm):
         required=False,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
-    # ユーザーが登録したカテゴリが表示されるようにする
-    def __init__(self, *args, user=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        if user:
-            self.fields['collection_category'].queryset = CollectionCategory.objects.filter(user=user)
-
     name = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'コレクション名'})
@@ -33,6 +27,17 @@ class MyCollectionForm(forms.ModelForm):
         required=True,
         widget=forms.FileInput(attrs={'class': 'form-control'})
     )
+    tag = forms.ModelMultipleChoiceField(
+        queryset=CollectionTag.objects.none(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={'class': 'tag-checkbox-group'})
+    )
+    # ユーザーが登録したカテゴ・タグが表示されるようにする
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['collection_category'].queryset = CollectionCategory.objects.filter(user=user)
+            self.fields['tag'].queryset = CollectionTag.objects.filter(user=user)
     class Meta:
         model = MyCollection
         fields = (
@@ -42,6 +47,7 @@ class MyCollectionForm(forms.ModelForm):
             'price',
             'collection_category',
             'image_path',
+            'tag',
             'memo',
         )
         widgets = {
