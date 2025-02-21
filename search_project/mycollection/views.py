@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm
+from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm, CollectionTagForm
 from django.contrib import messages
 from .models import MyCollection
 from django.core.paginator import Paginator
@@ -67,6 +67,7 @@ def collection_register(request):
             mycollection = form.save(commit=False)
             mycollection.user = request.user
             mycollection.save()
+            form.save_m2m()
             messages.success(request, 'コレクションが登録されました。')
             return redirect('mycollection:home')
         else:
@@ -87,7 +88,10 @@ def collection_edit(request, pk):
 
         form = MyCollectionForm(request.POST,  {'image_path': uploaded_image} , user=request.user, instance=mycollection)
         if form.is_valid():
-            form.save()
+            mycollection = form.save(commit=False)
+            mycollection.user = request.user
+            mycollection.save()
+            form.save_m2m()
             messages.success(request, 'コレクションが編集されました。')
             return redirect('mycollection:home')
     else:
@@ -146,3 +150,18 @@ def collection_category_register(request):
         form = CollectionCategoryForm()
 
     return render(request, 'collection_category_register.html', {'form': form})
+
+@login_required
+def collection_tag_register(request):
+    if request.method == 'POST':
+        form = CollectionTagForm(request.POST)
+        if form.is_valid():
+            collection_tag = form.save(commit=False)
+            collection_tag.user = request.user
+            collection_tag.save()
+            messages.success(request, 'タグが登録されました。')
+            return redirect('mycollection:collection_tag_register')
+    else:
+        form = CollectionTagForm()
+
+    return render(request, 'collection_tag_register.html', {'form': form})

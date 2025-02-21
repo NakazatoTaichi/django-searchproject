@@ -7,6 +7,13 @@ class CollectionCategory(models.Model):
     def __str__(self):
         return self.name
 
+class CollectionTag(models.Model):
+    name = models.CharField(max_length=30)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default="")
+    color_code = models.CharField(max_length=7)
+    def __str__(self):
+        return self.name
+
 class MyCollection(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(blank=True, null=True)
@@ -20,6 +27,7 @@ class MyCollection(models.Model):
         default=None
     )
     image_path = models.ImageField(upload_to='mycollections/')
+    tag = models.ManyToManyField(CollectionTag, blank=True)
     memo = models.TextField(blank=True, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

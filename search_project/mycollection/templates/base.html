@@ -62,6 +62,7 @@
         }
         .app-logo a {
             padding: 0;
+            margin-bottom: 20px;
         }
         .app-logo img {
             width: 100%;
@@ -93,7 +94,7 @@
             .app-logo img {
                 height: 45px;
                 width: auto;
-                padding: 0 8px;
+                padding: 2px 10px;
             }
         }
     </style>
@@ -108,7 +109,7 @@
         <a href="{% url 'mycollection:home' %}">コレクション一覧</a>
         <a href="{% url 'mycollection:collection_register' %}"><i class="fas fa-bookmark"></i>コレクション登録</a>
         <a href="{% url 'mycollection:collection_category_register' %}"><i class="fas fa-folder-plus"></i>カテゴリ登録</a>
-        <a href="#"><i class="fas fa-tags"></i>タグ登録</a>
+        <a href="{% url 'mycollection:collection_tag_register' %}"><i class="fas fa-tags"></i>タグ登録</a>
         <a href="#"><i class="fas fa-heart"></i>お気に入り</a>
 
         <div class="sidebar-footer">

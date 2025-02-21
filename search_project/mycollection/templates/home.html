@@ -72,6 +72,17 @@
                                     {% else %}
                                         <p>カテゴリ：{{ mycollection.collection_category.name }}</p>
                                     {% endif %}
+                                    {% with mycollection.tag.all as tags %}
+                                        <p>
+                                            {% if tags %}
+                                                {% for tag in tags %}
+                                                    <span class="badge" style="background-color: {{ tag.color_code }};">{{ tag.name }}</span>
+                                                {% endfor %}
+                                            {% else %}
+                                                タグなし
+                                            {% endif %}
+                                        </p>
+                                    {% endwith %}
                                 </div>
                             </a>
                         </div>
@@ -252,6 +263,17 @@
                             {% else %}
                                 <p>カテゴリ：{{ mycollection.collection_category.name }}</p>
                             {% endif %}
+                            {% with mycollection.tag.all as tags %}
+                                <p>
+                                    {% if tags %}
+                                        {% for tag in tags %}
+                                            <span class="badge" style="background-color: {{ tag.color_code }};">{{ tag.name }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        タグなし
+                                    {% endif %}
+                                </p>
+                            {% endwith %}
                         </div>
                     </a>
                 </div>

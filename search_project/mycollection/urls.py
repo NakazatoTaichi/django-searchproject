@@ -11,5 +11,6 @@ urlpatterns = [
     path('edit/<int:pk>', views.collection_edit, name='collection_edit'),
     path('delete/<int:pk>', views.collection_delete, name='collection_delete'),
     path('category/register', views.collection_category_register, name='collection_category_register'),
+    path('tag/register', views.collection_tag_register, name='collection_tag_register'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

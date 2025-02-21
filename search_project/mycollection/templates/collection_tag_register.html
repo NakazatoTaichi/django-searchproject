@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}コレクション登録{% endblock %}
+{% block title %}コレクションタグ登録{% endblock %}
 
 {% block content %}
 <div class="content col-10">
@@ -9,7 +9,7 @@
             <div class="col-12 col-md-9">
                 <div class="row">
                     <div class="col-6">
-                        <h4>コレクション登録</h4>
+                        <h4>タグ登録</h4>
                     </div>
                 </div>
                 <div class="col-12">
@@ -30,34 +30,12 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <th><label for="{{ form.name.id_for_label }}">コレクション名</label></th>
+                                <th><label for="{{ form.name.id_for_label }}">タグ名</label></th>
                                 <td>{{ form.name }}</td>
                             </tr>
                             <tr>
-                                <th><label for="{{ form.description.id_for_label }}">説明</label></th>
-                                <td>{{ form.description }}</td>
-                            </tr>
-                            <tr>
-                                <th><label for="{{ form.get_date.id_for_label }}">入手日</label></th>
-                                <td>{{ form.get_date }}</td>
-                            </tr>
-                            <tr>
-                                <th><label for="{{ form.price.id_for_label }}">価格</label></th>
-                                <td>{{ form.price }}</td>
-                            </tr>
-                            <th><label for="{{ form.collection_category.id_for_label }}">カテゴリ</label></th>
-                            <td>{{ form.collection_category }}</td>
-                            <tr>
-                                <th><label for="{{ form.image_path.id_for_label }}">イメージ画像</label></th>
-                                <td>{{ form.image_path }}</td>
-                            </tr>
-                            <tr>
-                                <th><label for="{{ form.tag.id_for_label }}">タグ付け</label></th>
-                                <td>{{ form.tag }}</td>
-                            </tr>
-                            <tr>
-                                <th><label for="{{ form.memo.id_for_label }}">メモ</label></th>
-                                <td>{{ form.memo }}</td>
+                                <th><label for="{{ form.color_code.id_for_label }}">色</label></th>
+                                <td>{{ form.color_code }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -95,21 +73,6 @@
     }
     .alert {
         margin-bottom: 0;
-    }
-    .tag-checkbox-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        width: 100%;
-    }
-    .tag-checkbox-group input {
-        margin-right: 5px;
-    }
-
-    .tag-checkbox-group label {
-        display: flex;
-        align-items: center;
-        white-space: nowrap;
     }
     @media (max-width: 768px) {
         .content {
