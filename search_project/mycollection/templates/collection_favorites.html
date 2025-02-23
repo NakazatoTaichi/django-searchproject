@@ -1,41 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}コレクション一覧（ホーム）{% endblock %}
+{% block title %}お気に入りコレクション一覧{% endblock %}
 
 {% block content %}
 <div class="content col-10">
-    <div class="d-flex justify-content-between align-items-center header-content mt-3 mb-4">
-        <div class="search-form d-flex align-items-center">
-            <div class="name-search-box">
-                <form method="get">
-                    <div class="d-flex">
-                        <input type="text" name="query" placeholder="コレクション名から検索" value="{{ request.GET.query }}"  />
-                        <button class="search-button" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-            <div class="filter-search-box">
-                <button class="filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
-                    <i class="fas fa-filter"></i>
-                    絞り込み
-                </button>
-            </div>
-            <div class="dropdown">
-                <form method="get">
-                    <button class="btn filter-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-sort-down"></i>並び替え順
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><button class="dropdown-item" name="order" value="name_order" type="submit">名前順</button></li>
-                        <li><button class="dropdown-item" name="order" value="register_order_des" type="submit">登録順</button></li>
-                        <li><button class="dropdown-item" name="order" value="register_order_asc" type="submit">古い順</button></li>
-                    </ul>
-                </form>
+    <div class="row">
+        <div class="col-12 col-md-9">
+            <div class="row">
+                <div class="col-12">
+                    <h4>お気に入り一覧</h4>
+                </div>
             </div>
         </div>
-        <div class="message">
+        <div class="col-12">
             {% if messages %}
                 <div class="messages">
                     {% for message in messages %}
@@ -45,16 +22,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12 col-md-9">
-            <div class="row">
-                <div class="col-12">
-                    <h4>コレクション一覧</h4>
-                </div>
-            </div>
-        </div>
         </div>
         <div class="col-12 col-md-9">
             <div class="row">
@@ -144,29 +111,16 @@
                                 </div>
                                 <div class="modal-footer">
                                     <div class="collection-favorite-form">
-                                        {% if mycollection.id in favorite_collections_ids %}
-                                            <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
-                                                <button class="btn" type="submit">
-                                                    <div class="favorite-add-button align-items-center">
-                                                        <i class="bi bi-star-fill"></i>
-                                                        <p>お気に入りを解除</p>
-                                                    </div>
-                                                </button>
-                                            </form>
-                                        {% else %}
-                                            <form action="{% url 'mycollection:collection_add_favorite' %}" method="POST">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
-                                                <button class="btn" type="submit">
-                                                    <div class="favorite-add-button align-items-center">
-                                                        <i class="bi bi-star"></i>
-                                                        <p>お気に入りに登録</p>
-                                                    </div>
-                                                </button>
-                                            </form>
-                                        {% endif %}
+                                        <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                            <button class="btn" type="submit">
+                                                <div class="favorite-add-button align-items-center">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <p>お気に入りを解除</p>
+                                                </div>
+                                            </button>
+                                        </form>
                                     </div>
                                     <div>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
@@ -178,7 +132,7 @@
                     </div>
                 {% empty %}
                 <div class="not-collection-message">
-                    <p>登録されたコレクションはありません。</p>
+                    <p>お気に入り登録されたコレクションはありません。</p>
                 </div>
                 {% endfor %}
             </div>
@@ -189,33 +143,15 @@
                     <ul class="pagination">
                         <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
                             <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}
-                            {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
-                            {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
-                            {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
-                            {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
-                            {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
-                            {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
                             {% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">前へ</a>
                         </li>
                         {% for num in page_obj.paginator.page_range %}
                             <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                                <a class="page-link" href="?page={{ num }}
-                                {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
-                                {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
-                                {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
-                                {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
-                                {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
-                                {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}">{{ num }}</a>
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                             </li>
                         {% endfor %}
                         <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
                             <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}
-                            {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
-                            {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
-                            {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
-                            {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
-                            {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
-                            {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
                             {% if not page_obj.has_next %}aria-disabled='true'{% endif %}">次へ</a>
                         </li>
                     </ul>
@@ -224,50 +160,11 @@
         </div>
     </div>
 </div>
-<!-- 絞り込みモーダルウィンドウ -->
-<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="filterModalLabel">絞り込み検索</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-            </div>
-            <form method="GET">
-                <div class="modal-body">
-                    <div class="filter-form">
-                            <table class="table">
-                                <tbody>
-                                    <th><label for="{{ form.collection_category.id_for_label }}">カテゴリ</label></th>
-                                    <td>{{ form.collection_category }}</td>
-                                    <tr>
-                                        <th><label for="get_date">入手日</label></th>
-                                        <td><input type="date" id="get_date" name="get_date" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <th><label for="price">価格</label></th>
-                                        <td>
-                                            <input type="number" id="price_min" name="price_min" class="form-control mb-2" placeholder="最小価格" min="0">
-                                            <input type="number" id="price_max" name="price_max" class="form-control" placeholder="最大価格" min="1">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div></div>
-                    <div>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                        <button type="submit" class="btn search-button">検索</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <div class="mobile-content">
     <div class="row">
+        <div class="col-12">
+            <h4>お気に入り一覧</h4>
+        </div>
         <div class="col-12">
             {% if messages %}
                 <div class="mobile-messages">
@@ -364,29 +261,16 @@
                             </div>
                             <div class="modal-footer">
                                 <div class="collection-favorite-form">
-                                    {% if mycollection.id in favorite_collections_ids %}
-                                        <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
-                                            <button class="btn" type="submit">
-                                                <div class="favorite-add-button align-items-center">
-                                                    <i class="bi bi-star-fill"></i>
-                                                    <p>解除</p>
-                                                </div>
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <form action="{% url 'mycollection:collection_add_favorite' %}" method="POST">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
-                                            <button class="btn" type="submit">
-                                                <div class="favorite-add-button align-items-center">
-                                                    <i class="bi bi-star"></i>
-                                                    <p>登録</p>
-                                                </div>
-                                            </button>
-                                        </form>
-                                    {% endif %}
+                                    <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                        <button class="btn" type="submit">
+                                            <div class="favorite-add-button align-items-center">
+                                                <i class="bi bi-star-fill"></i>
+                                                <p>解除</p>
+                                            </div>
+                                        </button>
+                                    </form>
                                 </div>
                                 <div>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
@@ -399,7 +283,7 @@
             </div>
         {% empty %}
             <div class="not-collection-message">
-                <p>登録されたコレクションはありません。</p>
+                <p>お気に入り登録されたコレクションはありません。</p>
             </div>
         {% endfor %}
         <div class="col-12 col-md-9">
@@ -408,79 +292,19 @@
                     <ul class="pagination">
                         <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
                             <a class="page-link" href="{% if page_obj.has_previous %}?page={{ page_obj.previous_page_number }}{% else %}#{% endif %}
-                            {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
-                            {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
-                            {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
-                            {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
-                            {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
-                            {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
                             {% if not page_obj.has_previous %}aria-disabled='true'{% endif %}">前へ</a>
                         </li>
                         {% for num in page_obj.paginator.page_range %}
                             <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                                <a class="page-link" href="?page={{ num }}
-                                {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
-                                {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
-                                {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
-                                {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
-                                {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
-                                {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}">{{ num }}</a>
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                             </li>
                         {% endfor %}
                         <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
                             <a class="page-link" href="{% if page_obj.has_next %}?page={{ page_obj.next_page_number }}{% else %}#{% endif %}
-                            {% if request.GET.query %}&query={{ request.GET.query }}{% endif %}
-                            {% if request.GET.collection_category %}&collection_category={{ request.GET.collection_category }}{% endif %}
-                            {% if request.GET.get_date %}&get_date={{ request.GET.get_date }}{% endif %}
-                            {% if request.GET.price_min %}&price_min={{ request.GET.price_min }}{% endif %}
-                            {% if request.GET.price_max %}&price_max={{ request.GET.price_max }}{% endif %}
-                            {% if request.GET.order %}&order={{ request.GET.order }}{% endif %}
                             {% if not page_obj.has_next %}aria-disabled='true'{% endif %}">次へ</a>
                         </li>
                     </ul>
                 </nav>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="search-bar-bottom">
-    <div class="filter-search-box">
-        <button class="search-bar-button" id="search-bar-button" type="button">
-            <i class="fas fa-search"></i>
-        </button>
-    </div>
-</div>
-<div class="search-from-field">
-    <div class="d-flex justify-content-between align-items-center">
-        <div class="name-search">
-            <form method="get">
-                <div class="name-search-box d-flex">
-                    <input type="text" name="query" placeholder="コレクション名から検索" value="{{ request.GET.query }}"  />
-                    <button class="search-button" type="submit">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="filter-search d-flex align-items-center">
-            <div class="filter-search-box">
-                <button class="btn btn-sm filter-button" data-bs-toggle="modal" data-bs-target="#filterModal">
-                    <i class="fas fa-filter"></i>
-                </button>
-            </div>
-            <div class="sort-search-box">
-                <form method="get">
-                    <div class="dropdown">
-                        <button class="btn filter-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-sort-down"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><button class="dropdown-item" name="order" value="name_order" type="submit">名前順</button></li>
-                            <li><button class="dropdown-item" name="order" value="register_order_des" type="submit">登録順</button></li>
-                            <li><button class="dropdown-item" name="order" value="register_order_asc" type="submit">古い順</button></li>
-                        </ul>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -497,39 +321,6 @@
         margin-left: 240px;
         padding: 20px;
         width: 100%;
-    }
-    .name-search-box input {
-        width: 400px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background: #fff;
-        color: #333;
-    }
-    .search-button {
-        padding: 10px 20px;
-        margin: 0 20px 0 10px;
-        border: none;
-        background-color: #343a40;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .filter-button {
-        padding: 10px 20px;
-        margin-left: 10px;
-        border: none;
-        background-color: #343a40;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .filter-form input {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background: #fff;
-        color: #333;
     }
     h4 {
         font-weight: bold;
@@ -650,12 +441,6 @@
     .mobile-content {
         display: none;
     }
-    .search-bar-bottom {
-        display: none;
-    }
-    .search-from-field {
-        display: none;
-    }
 
     @media (max-width: 768px) {
         .alert {
@@ -685,53 +470,6 @@
             margin: 20px;
             display: flex;
             justify-content: center;
-        }
-        .search-bar-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 500;
-            padding: 15px 20px;
-            display: block;
-        }
-        .search-bar-button {
-            border-radius: 50%;
-            padding: 15px 20px;
-            background-color: #343a40;
-            color: white;
-            border: none;
-        }
-        .search-from-field {
-            position: fixed;
-            margin-top: 56px;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 500;
-            padding: 10px;
-        }
-        .name-search {
-            width: 70%;
-        }
-        .search-from-field button {
-            padding: 5px 10px;
-        }
-        .name-search-box input {
-            width: 200px;
-            padding: 10px;
-            font-size: 12px;
-            border: 2px solid #ccc;
-        }
-        .filter-search {
-            width: 30%;
-        }
-        .filter-button {
-            padding: 10px 10px !important;
-        }
-        .search-button {
-            padding: 10px 15px !important;
-            margin: 0 10px;
         }
         .modal {
             margin-top: 80px;
@@ -772,20 +510,5 @@
             mobile_messages.style.display = 'none';
         }
     }, 5000);
-
-    // スマホサイズの検索バー表示
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchButton = document.getElementById("search-bar-button");
-        console.log(searchButton);
-        const searchFromField = document.querySelector(".search-from-field");
-
-        searchButton.addEventListener("click", function () {
-            if (searchFromField.style.display == "none") {
-                searchFromField.style.display = "block";
-            } else {
-                searchFromField.style.display = "none";
-            }
-        });
-    });
 </script>
 {% endblock %}

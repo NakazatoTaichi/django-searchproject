@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm, CollectionTagForm
+from .forms import CollectionSearchForm, MyCollectionForm, CollectionCategoryForm, CollectionTagForm, CollectionFavoriteForm
 from django.contrib import messages
-from .models import MyCollection
+from .models import MyCollection , CollectionFavorite
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 import io
@@ -52,7 +52,11 @@ def collection_home(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'home.html', {'form': form, 'page_obj': page_obj})
+    favorite_collections_ids = MyCollection.objects.filter(
+        id__in=CollectionFavorite.objects.filter(user=request.user).values_list('mycollection', flat=True)
+    ).values_list('id', flat=True)
+
+    return render(request, 'home.html', {'form': form, 'page_obj': page_obj, 'favorite_collections_ids': favorite_collections_ids})
 
 @login_required
 def collection_register(request):
@@ -165,3 +169,35 @@ def collection_tag_register(request):
         form = CollectionTagForm()
 
     return render(request, 'collection_tag_register.html', {'form': form})
+
+@login_required
+def collection_add_favorite(request):
+    if request.method == 'POST':
+        form = CollectionFavoriteForm(request.POST)
+        if form.is_valid():
+            form.instance.user = request.user
+            form.save()
+            messages.success(request, 'お気に入りに登録されました。')
+            return redirect('mycollection:home')
+    return redirect('mycollection:home')
+
+@login_required
+def collection_remove_favorite(request):
+    if request.method == 'POST':
+        favorite = CollectionFavorite.objects.get(user=request.user, mycollection=request.POST.get('mycollection'))
+        favorite.delete()
+        messages.success(request, 'お気に入りが解除されました。')
+        return redirect('mycollection:home')
+    return redirect('mycollection:home')
+
+@login_required
+def collection_favorites(request):
+    favorite_mycollections = MyCollection.objects.filter(
+        id__in=CollectionFavorite.objects.filter(user=request.user).values_list('mycollection', flat=True)
+    )
+    # ページネーション
+    paginator = Paginator(favorite_mycollections, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'collection_favorites.html', {'page_obj': page_obj})
