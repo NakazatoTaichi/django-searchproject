@@ -1,5 +1,5 @@
 from django import forms
-from .models import MyCollection , CollectionCategory , CollectionTag
+from .models import MyCollection , CollectionCategory , CollectionTag , CollectionFavorite
 
 class CollectionSearchForm(forms.Form):
     collection_category = forms.ModelChoiceField(
@@ -83,4 +83,11 @@ class CollectionTagForm(forms.ModelForm):
         fields = (
             'name',
             'color_code',
+        )
+
+class CollectionFavoriteForm(forms.ModelForm):
+    class Meta:
+        model = CollectionFavorite
+        fields = (
+            'mycollection',
         )
