@@ -164,6 +164,9 @@
                 <a class="nav-link" href="{% url 'mycollection:collection_category_register' %}"><i class="fas fa-folder-plus"></i>カテゴリ登録</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{% url 'mycollection:collection_tag_register' %}"><i class="fas fa-tags"></i>タグ登録</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#">
                     <i class="bi bi-person-circle"></i>
                     {% if user.is_authenticated %}
