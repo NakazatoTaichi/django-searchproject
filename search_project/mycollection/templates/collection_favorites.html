@@ -110,8 +110,22 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                    <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                    <div class="collection-favorite-form">
+                                        <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                            <button class="btn" type="submit">
+                                                <div class="favorite-add-button align-items-center">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <p>お気に入りを解除</p>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                        <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -246,8 +260,22 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                <div class="collection-favorite-form">
+                                    <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                        <button class="btn" type="submit">
+                                            <div class="favorite-add-button align-items-center">
+                                                <i class="bi bi-star-fill"></i>
+                                                <p>解除</p>
+                                            </div>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                    <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -293,39 +321,6 @@
         margin-left: 240px;
         padding: 20px;
         width: 100%;
-    }
-    .name-search-box input {
-        width: 400px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background: #fff;
-        color: #333;
-    }
-    .search-button {
-        padding: 10px 20px;
-        margin: 0 20px 0 10px;
-        border: none;
-        background-color: #343a40;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .filter-button {
-        padding: 10px 20px;
-        margin-left: 10px;
-        border: none;
-        background-color: #343a40;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    .filter-form input {
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background: #fff;
-        color: #333;
     }
     h4 {
         font-weight: bold;
@@ -394,6 +389,41 @@
             margin-bottom: 10px;
             font-weight: bold;
     }
+    .collection-favorite-form button {
+        background: white;
+        border: 2px solid #FFC107;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px 10px;
+    }
+    .collection-favorite-form button:hover {
+        background: #FF9800;
+        border: 2px solid #FF9800;
+    }
+    .favorite-add-button {
+        display: flex;
+    }
+    .favorite-add-button i {
+        font-size: 24px;
+        margin-right: 5px;
+        color: #FFC107;
+    }
+    .favorite-add-button p {
+        color: #FFC107;
+        margin: 0;
+    }
+    .collection-favorite-form button:hover p {
+        color: white;
+    }
+    .collection-favorite-form button:hover i {
+        color: white;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
     .long-text {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -409,12 +439,6 @@
         right: 40px;
     }
     .mobile-content {
-        display: none;
-    }
-    .search-bar-bottom {
-        display: none;
-    }
-    .search-from-field {
         display: none;
     }
 
@@ -446,53 +470,6 @@
             margin: 20px;
             display: flex;
             justify-content: center;
-        }
-        .search-bar-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 500;
-            padding: 15px 20px;
-            display: block;
-        }
-        .search-bar-button {
-            border-radius: 50%;
-            padding: 15px 20px;
-            background-color: #343a40;
-            color: white;
-            border: none;
-        }
-        .search-from-field {
-            position: fixed;
-            margin-top: 56px;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 500;
-            padding: 10px;
-        }
-        .name-search {
-            width: 70%;
-        }
-        .search-from-field button {
-            padding: 5px 10px;
-        }
-        .name-search-box input {
-            width: 200px;
-            padding: 10px;
-            font-size: 12px;
-            border: 2px solid #ccc;
-        }
-        .filter-search {
-            width: 30%;
-        }
-        .filter-button {
-            padding: 10px 10px !important;
-        }
-        .search-button {
-            padding: 10px 15px !important;
-            margin: 0 10px;
         }
         .modal {
             margin-top: 80px;
@@ -533,20 +510,5 @@
             mobile_messages.style.display = 'none';
         }
     }, 5000);
-
-    // スマホサイズの検索バー表示
-    document.addEventListener("DOMContentLoaded", function () {
-        const searchButton = document.getElementById("search-bar-button");
-        console.log(searchButton);
-        const searchFromField = document.querySelector(".search-from-field");
-
-        searchButton.addEventListener("click", function () {
-            if (searchFromField.style.display == "none") {
-                searchFromField.style.display = "block";
-            } else {
-                searchFromField.style.display = "none";
-            }
-        });
-    });
 </script>
 {% endblock %}
