@@ -52,7 +52,11 @@ def collection_home(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'home.html', {'form': form, 'page_obj': page_obj})
+    favorite_collections_ids = MyCollection.objects.filter(
+        id__in=CollectionFavorite.objects.filter(user=request.user).values_list('mycollection', flat=True)
+    ).values_list('id', flat=True)
+
+    return render(request, 'home.html', {'form': form, 'page_obj': page_obj, 'favorite_collections_ids': favorite_collections_ids})
 
 @login_required
 def collection_register(request):

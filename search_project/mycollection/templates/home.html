@@ -143,8 +143,35 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                    <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                    <div class="collection-favorite-form">
+                                        {% if mycollection.id in favorite_collections_ids %}
+                                            <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                                <button class="btn" type="submit">
+                                                    <div class="favorite-add-button align-items-center">
+                                                        <i class="bi bi-star-fill"></i>
+                                                        <p>お気に入りを解除</p>
+                                                    </div>
+                                                </button>
+                                            </form>
+                                        {% else %}
+                                            <form action="{% url 'mycollection:collection_add_favorite' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                                <button class="btn" type="submit">
+                                                    <div class="favorite-add-button align-items-center">
+                                                        <i class="bi bi-star"></i>
+                                                        <p>お気に入りに登録</p>
+                                                    </div>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                        <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -228,8 +255,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                    <button type="submit" class="btn search-button">検索</button>
+                    <div></div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                        <button type="submit" class="btn search-button">検索</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -333,8 +363,11 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                                <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                <div></div>
+                                <div>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                    <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -540,6 +573,41 @@
             overflow: hidden;
             margin-bottom: 10px;
             font-weight: bold;
+    }
+    .collection-favorite-form button {
+        background: white;
+        border: 2px solid #FFC107;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 5px 10px;
+    }
+    .collection-favorite-form button:hover {
+        background: #FF9800;
+        border: 2px solid #FF9800;
+    }
+    .favorite-add-button {
+        display: flex;
+    }
+    .favorite-add-button i {
+        font-size: 24px;
+        margin-right: 5px;
+        color: #FFC107;
+    }
+    .favorite-add-button p {
+        color: #FFC107;
+        margin: 0;
+    }
+    .collection-favorite-form button:hover p {
+        color: white;
+    }
+    .collection-favorite-form button:hover i {
+        color: white;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     .long-text {
         display: -webkit-box;
