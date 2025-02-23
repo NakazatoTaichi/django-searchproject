@@ -363,7 +363,31 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <div></div>
+                                <div class="collection-favorite-form">
+                                    {% if mycollection.id in favorite_collections_ids %}
+                                        <form action="{% url 'mycollection:collection_remove_favorite' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                            <button class="btn" type="submit">
+                                                <div class="favorite-add-button align-items-center">
+                                                    <i class="bi bi-star-fill"></i>
+                                                    <p>解除</p>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form action="{% url 'mycollection:collection_add_favorite' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="mycollection" value="{{ mycollection.id }}">
+                                            <button class="btn" type="submit">
+                                                <div class="favorite-add-button align-items-center">
+                                                    <i class="bi bi-star"></i>
+                                                    <p>登録</p>
+                                                </div>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
                                 <div>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
                                     <a href="{% url 'mycollection:collection_edit' mycollection.pk %}" class="btn search-button">編集</a>
