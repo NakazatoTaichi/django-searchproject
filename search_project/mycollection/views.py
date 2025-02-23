@@ -185,3 +185,15 @@ def collection_remove_favorite(request):
         messages.success(request, 'お気に入りが解除されました。')
         return redirect('mycollection:home')
     return redirect('mycollection:home')
+
+@login_required
+def collection_favorites(request):
+    favorite_mycollections = MyCollection.objects.filter(
+        id__in=CollectionFavorite.objects.filter(user=request.user).values_list('mycollection', flat=True)
+    )
+    # ページネーション
+    paginator = Paginator(favorite_mycollections, 8)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'collection_favorites.html', {'page_obj': page_obj})
