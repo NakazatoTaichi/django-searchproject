@@ -5,6 +5,8 @@ from django.urls import reverse_lazy
 from django.views import View
 from .forms import SignUpForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib import messages
 
 class SignUpView(View):
     def get(self, request):
@@ -16,5 +18,17 @@ class SignUpView(View):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(self.request, f'{user.username}さん、ようこそ！')
             return redirect('mycollection:home')
         return render(request, 'signup.html', {'form': form})
+
+class CustomLoginView(LoginView):
+    template_name='login.html'
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, 'ログインしました。')
+        return super().form_valid(form)
+
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, 'ログアウトしました。')
+        return super().dispatch(request, *args, **kwargs)
