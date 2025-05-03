@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from .views import SignUpView
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import CustomLoginView
+from accounts.views import CustomLoginView, CustomLogoutView
 
 
 app_name = 'accounts'
@@ -12,7 +12,7 @@ app_name = 'accounts'
 urlpatterns = [
     path('signup', SignUpView.as_view(), name="signup"),
     path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='accounts:login'), name='logout'),
+    path('logout/', CustomLogoutView.as_view(), name='logout'),
 ]
 
 if settings.DEBUG:

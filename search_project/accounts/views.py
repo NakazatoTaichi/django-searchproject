@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from .forms import SignUpForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 
 class SignUpView(View):
@@ -26,3 +26,8 @@ class CustomLoginView(LoginView):
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, 'ログインしました。')
         return super().form_valid(form)
+
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, 'ログアウトしました。')
+        return super().dispatch(request, *args, **kwargs)
