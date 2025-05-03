@@ -18,6 +18,7 @@ class SignUpView(View):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(self.request, f'{user.username}さん、ようこそ！')
             return redirect('mycollection:home')
         return render(request, 'signup.html', {'form': form})
 
